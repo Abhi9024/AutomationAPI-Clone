@@ -37,12 +37,16 @@ namespace Automation.Service.Controllers
 
         // GET api/values/5
         [HttpGet("GetTestData/{id}/{userId}")]
-        public TestDataVM Get(int id,int userId)
+        public TestDataVM Get(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = true;
-            data.LockedByUser = userId;
-            _testDataRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = true;
+                data.LockedByUser = userId;
+                data.UserId = userId;
+                _testDataRepo.UpdateLockedByFlags(data);
+            }
             return _mapper.Map<TestDataVM>(data);
         }
 
@@ -50,9 +54,13 @@ namespace Automation.Service.Controllers
         public void ResetLockedByField(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = null;
-            data.LockedByUser = null;
-            _testDataRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = null;
+                data.LockedByUser = null;
+                data.UserId = null;
+                _testDataRepo.UpdateLockedByFlags(data);
+            }
         }
 
         // POST api/values
@@ -73,9 +81,15 @@ namespace Automation.Service.Controllers
 
         // DELETE api/values/5
         [HttpDelete("DeleteTestData/{id}/{userId}")]
-        public void Delete(int id,int userId)
+        public void Delete(int id, int userId)
         {
-            _testDataRepo.DeleteTestData(id,userId);
+            _testDataRepo.DeleteTestData(id, userId);
+        }
+
+        [HttpGet("GetRecordsCount")]
+        public int GetRecordsCount()
+        {
+            return _genericRepo.GetRecordsCount();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Automation.Service.Controllers
         private IKeywordEntityRepo _keywordRepo;
         private IMapper _mapper;
 
-        public KeywordsController(IGenericRepo<KeywordLibrary> genericRepo, IKeywordEntityRepo keywordRepo,IMapper mapper)
+        public KeywordsController(IGenericRepo<KeywordLibrary> genericRepo, IKeywordEntityRepo keywordRepo, IMapper mapper)
         {
             _genericRepo = genericRepo;
             _keywordRepo = keywordRepo;
@@ -34,12 +34,16 @@ namespace Automation.Service.Controllers
         }
 
         [HttpGet("GetKeywordById/{id}/{userId}")]
-        public KeywordEntityVM GetKeywordById(int id,int userId)
+        public KeywordEntityVM GetKeywordById(int id, int userId)
         {
-            var data =_genericRepo.GetById(id);
-            data.IsLocked = true;
-            data.LockedByUser = userId;
-            _keywordRepo.UpdateLockedByFlags(data);
+            var data = _genericRepo.GetById(id);
+            if (data != null)
+            {
+                data.IsLocked = true;
+                data.LockedByUser = userId;
+                data.UserId = userId;
+                _keywordRepo.UpdateLockedByFlags(data);
+            }
             return _mapper.Map<KeywordEntityVM>(data);
         }
 
@@ -47,9 +51,13 @@ namespace Automation.Service.Controllers
         public void ResetLockedByField(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = null;
-            data.LockedByUser = null;
-            _keywordRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = null;
+                data.LockedByUser = null;
+                data.UserId = null;
+                _keywordRepo.UpdateLockedByFlags(data);
+            }
         }
 
         [HttpPost("AddKeyword")]
@@ -62,17 +70,23 @@ namespace Automation.Service.Controllers
         [HttpPut("UpdateKeyword/{id}")]
         public void UpdateKeyword(int id, [FromBody]KeywordEntityVM keyword)
         {
-           
+
             var data = _mapper.Map<KeywordLibrary>(keyword);
-            
+
 
             _keywordRepo.UpdateKeyword(id, data);
         }
 
         [HttpDelete("DeleteKeyword/{id}/{userId}")]
-        public void DeleteKeyword(int id,int userId)
+        public void DeleteKeyword(int id, int userId)
         {
             _keywordRepo.DeleteKeyword(id, userId);
+        }
+
+        [HttpGet("GetRecordsCount")]
+        public int GetRecordsCount()
+        {
+            return _genericRepo.GetRecordsCount();
         }
     }
 }

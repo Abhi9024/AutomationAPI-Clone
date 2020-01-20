@@ -72,6 +72,12 @@ namespace Automation.Service.Controllers
             return _mapper.Map<List<ModuleController_MapVM>>(_moduleControllerMapRepo.GetAll());
         }
 
+        [HttpGet("GetModuleRecordsCount")]
+        public int GetModuleRecordsCount()
+        {
+            return _genericRepo.GetRecordsCount();
+        }
+
         [EnableQuery]
         [HttpGet("GetAllTestController/{userId}")]
         public IList<TestControllerVM> GetAllTestController(int userId)
@@ -105,11 +111,24 @@ namespace Automation.Service.Controllers
             return _mapper.Map<List<TestController_MapVM>>(_testControllerMapRepo.GetAll());
         }
 
+        [HttpGet("GetTestControllerRecordsCount")]
+        public int GetTestControllerRecordsCount()
+        {
+            return _genericRepo2.GetRecordsCount();
+        }
+
+
         [EnableQuery]
         [HttpGet("GetAllBrowserController")]
         public IList<BrowserControllerVM> GetAllBrowserVMExec()
         {
             return _mapper.Map<List<BrowserControllerVM>>(_genericRepo3.GetAll());
+        }
+
+        [HttpGet("GetBrowserRecordsCount")]
+        public int GetBrowserRecordsCount()
+        {
+            return _genericRepo3.GetRecordsCount();
         }
 
         [HttpGet("GetModuleControllerById/{id}/{userId}")]

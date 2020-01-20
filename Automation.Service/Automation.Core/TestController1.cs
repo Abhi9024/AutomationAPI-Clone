@@ -13,10 +13,10 @@ namespace Automation.Core
         public string Run { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 
     public class ModuleController_Map : BaseEntity
@@ -26,10 +26,10 @@ namespace Automation.Core
         public string MachineID { get; set; }
         public int MachineSequenceID { get; set; }
         public string Run { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class TestController : BaseEntity
@@ -47,10 +47,10 @@ namespace Automation.Core
         public string TestScriptDescription { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 
     public class TestController_Map : BaseEntity
@@ -66,10 +66,10 @@ namespace Automation.Core
         public int StepsCount { get; set; }
         public string TestScriptName { get; set; }
         public string TestScriptDescription { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class BrowserVMExec : BaseEntity
@@ -79,10 +79,10 @@ namespace Automation.Core
         public string Run { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public int? UserId { get; set; }
     }
 }

@@ -13,13 +13,13 @@ namespace Automation.Service.ViewModel
         public string MachineID { get; set; }
         public int MachineSequenceID { get; set; }
         public string Run { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class ModuleController_MapVM : BaseEntityVM
@@ -30,10 +30,10 @@ namespace Automation.Service.ViewModel
         public string MachineID { get; set; }
         public int MachineSequenceID { get; set; }
         public string Run { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class TestControllerVM : BaseEntityVM
@@ -50,13 +50,13 @@ namespace Automation.Service.ViewModel
         public int StepsCount { get; set; }
         public string TestScriptName { get; set; }
         public string TestScriptDescription { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class TestController_MapVM : BaseEntityVM
@@ -73,10 +73,10 @@ namespace Automation.Service.ViewModel
         public int StepsCount { get; set; }
         public string TestScriptName { get; set; }
         public string TestScriptDescription { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public int UserId { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class BrowserControllerVM : BaseEntityVM
@@ -86,10 +86,10 @@ namespace Automation.Service.ViewModel
         public string Exec { get; set; }
         public int StatusID { get; set; }
         public int CUDStatusID { get; set; }
-        public bool IsLocked { get; set; }
-        public int LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public bool? IsLocked { get; set; }
+        public int? LockedByUser { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public int? UserId { get; set; }
     }
 }

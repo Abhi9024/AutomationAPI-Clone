@@ -19,7 +19,7 @@ namespace Automation.Service.Controllers
         private IRepositoryEntityRepo _repositoryEntityRepo;
         private IMapper _mapper;
 
-        public RepositoryController(IGenericRepo<Repository> genericRepo, IRepositoryEntityRepo repositoryEntityRepo,IMapper mapper)
+        public RepositoryController(IGenericRepo<Repository> genericRepo, IRepositoryEntityRepo repositoryEntityRepo, IMapper mapper)
         {
             _genericRepo = genericRepo;
             _repositoryEntityRepo = repositoryEntityRepo;
@@ -38,9 +38,13 @@ namespace Automation.Service.Controllers
         public RepositoryEntityVM GetRepositoryById(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = true;
-            data.LockedByUser = userId;
-            _repositoryEntityRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = true;
+                data.LockedByUser = userId;
+                data.UserId = userId;
+                _repositoryEntityRepo.UpdateLockedByFlags(data);
+            }
             return _mapper.Map<RepositoryEntityVM>(data);
         }
 
@@ -48,9 +52,13 @@ namespace Automation.Service.Controllers
         public void ResetLockedByField(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = null;
-            data.LockedByUser = null;
-            _repositoryEntityRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = null;
+                data.LockedByUser = null;
+                data.UserId = null;
+                _repositoryEntityRepo.UpdateLockedByFlags(data);
+            }
         }
 
         [HttpPost("AddRepository")]
@@ -68,9 +76,15 @@ namespace Automation.Service.Controllers
         }
 
         [HttpDelete("DeleteRepository/{id}/{userId}")]
-        public void DeleteRepository(int id,int userId)
+        public void DeleteRepository(int id, int userId)
         {
-            _repositoryEntityRepo.DeleteRepository(id,userId);
+            _repositoryEntityRepo.DeleteRepository(id, userId);
+        }
+
+        [HttpGet("GetRecordsCount")]
+        public int GetRecordsCount()
+        {
+            return _genericRepo.GetRecordsCount();
         }
     }
 }

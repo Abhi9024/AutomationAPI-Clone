@@ -44,5 +44,15 @@ namespace Automation.Data
             return result;
         }
 
+        public int GetRecordsCount()
+        {
+            var result = 0;
+            var typeName = typeof(T).Name;
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                result = (int)(con.Query<int>($"Select COUNT(*) from  [dbo].[{typeName}]", commandType: CommandType.Text)).FirstOrDefault();
+            }
+            return result;
+        }
     }
 }

@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Automation.Core.DataAccessAbstractions
 {
-    public interface IGenericRepo<T>
+    public interface IDashboardRepo
     {
-        IList<T> GetAll();
-        T GetById(int id);
-        int GetRecordsCount();
+        int RecordsModified();
+        string[] ModifiedFeeds();
     }
 }

@@ -181,7 +181,7 @@ namespace Automation.Data
             }
         }
 
-        public void CreateController1Map(int userId, ModuleController controller1)
+        public void CreateController1Map(int? userId, ModuleController controller1)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -233,7 +233,7 @@ namespace Automation.Data
             }
         }
 
-        public void CreateController2Map(int userId, TestController controller2)
+        public void CreateController2Map(int? userId, TestController controller2)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -298,7 +298,7 @@ namespace Automation.Data
             }
         }
 
-        public void DeleteController1Map(int userId, string moduleId)
+        public void DeleteController1Map(int? userId, string moduleId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -329,7 +329,7 @@ namespace Automation.Data
             }
         }
 
-        public void DeleteController2Map(int userId, string testCaseID)
+        public void DeleteController2Map(int? userId, string testCaseID)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -384,7 +384,7 @@ namespace Automation.Data
             }
         }
 
-        public ModuleController_Map GetMappedModuleData(int userId, ModuleController controller1)
+        public ModuleController_Map GetMappedModuleData(int? userId, ModuleController controller1)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -401,7 +401,7 @@ namespace Automation.Data
         }
 
 
-        public void UpdateController1Map(int userId, ModuleController_Map controller1)
+        public void UpdateController1Map(int? userId, ModuleController_Map controller1)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -421,7 +421,7 @@ namespace Automation.Data
             }
         }
 
-        public TestController_Map GetMappedTestControllerData(int userId, TestController controller2)
+        public TestController_Map GetMappedTestControllerData(int? userId, TestController controller2)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -467,7 +467,7 @@ namespace Automation.Data
             }
         }
 
-        public void UpdateController2Map(int userId, TestController_Map controller2)
+        public void UpdateController2Map(int? userId, TestController_Map controller2)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {

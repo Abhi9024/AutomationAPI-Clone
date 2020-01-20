@@ -30,6 +30,7 @@ namespace Automation.Service.Mapper
                 .ReverseMap();
             CreateMap<Repository, RepositoryEntityVM>().ReverseMap();
             CreateMap<TestData, TestDataVM>().ReverseMap();
+            CreateMap<UserTable, UserVM>().ReverseMap();
         }
     }
 }

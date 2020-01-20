@@ -20,7 +20,7 @@ namespace Automation.Service.Controllers
         private ITestScriptsRepo _testScriptsRepo;
         private IMapper _mapper;
 
-        public TestScriptsController(IGenericRepo<TestScripts> genericRepo, ITestScriptsRepo testScriptsRepo,IMapper mapper)
+        public TestScriptsController(IGenericRepo<TestScripts> genericRepo, ITestScriptsRepo testScriptsRepo, IMapper mapper)
         {
             _genericRepo = genericRepo;
             _testScriptsRepo = testScriptsRepo;
@@ -36,12 +36,16 @@ namespace Automation.Service.Controllers
         }
 
         [HttpGet("GetScript/{id}/{userId}")]
-        public TestScriptVM Get(int id,int userId)
+        public TestScriptVM Get(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = true;
-            data.LockedByUser = userId;
-            _testScriptsRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = true;
+                data.LockedByUser = userId;
+                data.UserId = userId;
+                _testScriptsRepo.UpdateLockedByFlags(data);
+            }
             return _mapper.Map<TestScriptVM>(_genericRepo.GetById(id));
         }
 
@@ -49,9 +53,13 @@ namespace Automation.Service.Controllers
         public void ResetLockedByField(int id, int userId)
         {
             var data = _genericRepo.GetById(id);
-            data.IsLocked = null;
-            data.LockedByUser = null;
-            _testScriptsRepo.UpdateLockedByFlags(data);
+            if (data != null)
+            {
+                data.IsLocked = null;
+                data.LockedByUser = null;
+                data.UserId = null;
+                _testScriptsRepo.UpdateLockedByFlags(data);
+            }
         }
 
         [HttpPost("AddScript")]
@@ -76,9 +84,15 @@ namespace Automation.Service.Controllers
         }
 
         [HttpDelete("DeleteScript/{id}/{userId}")]
-        public void Delete(int id,int userId)
+        public void Delete(int id, int userId)
         {
-            _testScriptsRepo.DeleteScript(id,userId);
+            _testScriptsRepo.DeleteScript(id, userId);
+        }
+
+        [HttpGet("GetRecordsCount")]
+        public int GetRecordsCount()
+        {
+           return _genericRepo.GetRecordsCount();
         }
     }
 }

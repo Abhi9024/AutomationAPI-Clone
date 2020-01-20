@@ -8,7 +8,7 @@ namespace Automation.Service.ViewModel
     public class TestScriptVM : BaseEntityVM
     {
         public string TestCaseID { get; set; }
-        public int TCStepID { get; set; }
+        public string TCStepID { get; set; }
         public string TestScriptName { get; set; }
         public string FunctionDescription { get; set; }
         public string FunctionName { get; set; }
@@ -118,8 +118,8 @@ namespace Automation.Service.ViewModel
         public int CUDStatusID { get; set; }
         public bool? IsLocked { get; set; }
         public int? LockedByUser { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public int? UserId { get; set; }
     }
 }

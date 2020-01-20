@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Automation.Core.DataAccessAbstractions;
 using Automation.Data;
+using Automation.Data.Auth;
 using Microsoft.EntityFrameworkCore;
 using Automation.Core;
 using Swashbuckle.AspNetCore.Swagger;
@@ -94,6 +95,9 @@ namespace Automation.Service
             services.AddTransient<IKeywordEntityRepo, KeywordEntityRepo>();
             services.AddTransient<IRepositoryEntityRepo, RepositoryEntityRepo>();
             services.AddTransient<ITestDataRepo, TestDataRepo>();
+            services.AddTransient<IAuthProvider, AuthProvider>();
+            services.AddTransient<IGenericRepo<UserTable>, GenericRepo<UserTable>>();
+            services.AddTransient<IDashboardRepo, DashboardRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
