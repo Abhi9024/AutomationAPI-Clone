@@ -23,7 +23,24 @@ namespace Automation.Data
 
         public string[] ModifiedFeeds()
         {
-            return new string[] {"Feeds to be implemented"} ;
+            var result = new List<string>();
+            
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var typeNames = new List<string>() { "KeywordLibrary", "Repository", "ModuleController", "TestController", "BrowserVMExec", "TestData", "TestScripts" };
+                foreach (var item in typeNames)
+                {
+                   var  allUsers = con.Query<string>($"{GetUserModifiedScript(item)}", commandType: CommandType.Text).ToList();
+                    result.AddRange(allUsers);
+                }
+            }
+            
+            return result.Distinct().ToArray() ;
+        }
+
+        private string GetUserModifiedScript(string tableName)
+        {
+            return $"select UserName from UserTable where Id IN (Select UserId from [dbo].[{tableName}] where UpdatedOn IS NOT NULL)";
         }
 
         public int RecordsModified()

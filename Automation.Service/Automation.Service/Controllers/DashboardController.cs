@@ -38,7 +38,14 @@ namespace Automation.Service.Controllers
         [HttpGet("GetLatestFeeds")]
         public string[] GetLatestFeeds()
         {
-            return _dashboardRepo.ModifiedFeeds();
+            var feeds = new List<string>();
+            var users = _dashboardRepo.ModifiedFeeds();
+            foreach (var user in users)
+            {
+                feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+            }
+
+            return feeds.ToArray();
         }
     }
 }
