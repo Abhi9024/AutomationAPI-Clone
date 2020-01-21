@@ -41,7 +41,7 @@ namespace Automation.Core
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }
-        public string JIRA_ID { get; set; }
+        public string JiraID { get; set; }
         public int StepsCount { get; set; }
         public string TestScriptName { get; set; }
         public string TestScriptDescription { get; set; }
@@ -62,7 +62,7 @@ namespace Automation.Core
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }
-        public string JIRA_ID { get; set; }
+        public string JiraID { get; set; }
         public int StepsCount { get; set; }
         public string TestScriptName { get; set; }
         public string TestScriptDescription { get; set; }

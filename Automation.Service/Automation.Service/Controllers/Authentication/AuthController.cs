@@ -23,10 +23,10 @@ namespace Automation.Service.Controllers.Authentication
         
         // POST api/values
         [HttpPost("Login")]
-        public bool Login([FromBody]UserVM user)
+        public int Login([FromBody]UserVM user)
         {
-            var isSuccess = _authProvider.ValidateLogin(user.UserName,user.Password);
-            return isSuccess;
+            var userId = _authProvider.ValidateLogin(user.UserName,user.Password);
+            return userId;
         }
 
         // POST api/values

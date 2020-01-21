@@ -30,7 +30,7 @@ namespace Automation.Data.Auth
 
         private string GetUserValidateScript()
         {
-            return @"Select Count(*) from [dbo].[UserTable] where [UserName] = @UserName and [Password] = @Password";
+            return @"Select UserId from [dbo].[UserTable] where [UserName] = @UserName and [Password] = @Password";
         }
 
         public string ComputeHash(string input)
@@ -57,7 +57,7 @@ namespace Automation.Data.Auth
             }
         }
 
-        public bool ValidateLogin(string userName, string password)
+        public int ValidateLogin(string userName, string password)
         {
             var hashedPassword = ComputeHash(password);
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -66,10 +66,10 @@ namespace Automation.Data.Auth
                 parameters.Add("@UserName", userName);
                 parameters.Add("@Password", hashedPassword);
 
-               var count =  con.Query<int>($"{GetUserValidateScript()}",
+               var userId =  con.Query<int>($"{GetUserValidateScript()}",
                     parameters,
-                    commandType: CommandType.Text);
-                return count.FirstOrDefault() > 0;
+                    commandType: CommandType.Text).FirstOrDefault();
+                return userId;
             }
         }
     }

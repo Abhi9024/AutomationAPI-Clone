@@ -93,7 +93,7 @@ namespace Automation.Service.Controllers
                         value.TestCaseID = item.TestCaseID;
                         value.TestScriptDescription = item.TestScriptDescription;
                         value.Run = item.Run;
-                        value.JIRA_ID = item.JIRA_ID;
+                        value.JiraID = item.JiraID;
                         value.SequenceID = item.SequenceID;
                         value.LockedByUser = item.LockedByUser;
                         value.UserId = item.UserId;
