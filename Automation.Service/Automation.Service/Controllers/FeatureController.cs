@@ -93,7 +93,7 @@ namespace Automation.Service.Controllers
                         value.TestCaseID = item.TestCaseID;
                         value.TestScriptDescription = item.TestScriptDescription;
                         value.Run = item.Run;
-                        value.JIRA_ID = item.JIRA_ID;
+                        value.JiraID = item.JiraID;
                         value.SequenceID = item.SequenceID;
                         value.LockedByUser = item.LockedByUser;
                         value.UserId = item.UserId;
@@ -202,7 +202,7 @@ namespace Automation.Service.Controllers
 
             if (mappedData != null)
             {
-                var mappedUpdate = _mapper.Map<ModuleController_MapVM>(data);
+                var mappedUpdate = _mapper.Map<ModuleController_MapVM>(testController1);
                 var mapData = _mapper.Map<ModuleController_Map>(mappedUpdate);
                 _testControllerRepo.UpdateController1Map(testController1.UserId, mapData);
             }
@@ -220,7 +220,7 @@ namespace Automation.Service.Controllers
 
             if (mappedData != null)
             {
-                var mappedUpdate = _mapper.Map<TestController_MapVM>(data);
+                var mappedUpdate = _mapper.Map<TestController_MapVM>(testController2);
                 var mapData = _mapper.Map<TestController_Map>(mappedUpdate);
                 _testControllerRepo.UpdateController2Map(testController2.UserId, mapData);
             }
@@ -238,26 +238,26 @@ namespace Automation.Service.Controllers
         }
 
 
-        [HttpDelete("DeleteModuleController/{id}")]
-        public void DeleteModuleController(int id, [FromBody]ModuleControllerVM testController1)
+        [HttpDelete("DeleteModuleController/{id}/{userId}")]
+        public void DeleteModuleController(int id, int userId)
         {
-            var data = _mapper.Map<ModuleController>(testController1);
-            var mappedData = _testControllerRepo.GetMappedModuleData(testController1.UserId, data);
+            var testController1 = _genericRepo.GetById(id);
+            var mappedData = _testControllerRepo.GetMappedModuleData(userId, testController1);
             if (mappedData == null)
             {
                 _testControllerRepo.DeleteController1(id);
             }
             else
             {
-                _testControllerRepo.DeleteController1Map(testController1.UserId, testController1.ModuleID);
+                _testControllerRepo.DeleteController1Map(userId, testController1.ModuleID);
             }
         }
 
-        [HttpDelete("DeleteTestController/{id}")]
-        public void DeleteTestController(int id, [FromBody]TestControllerVM testController2)
+        [HttpDelete("DeleteTestController/{id}/{userId}")]
+        public void DeleteTestController(int id, int userId)
         {
-            var data = _mapper.Map<TestController>(testController2);
-            var mappedData = _testControllerRepo.GetMappedTestControllerData(testController2.UserId, data);
+            var testController2 = _genericRepo2.GetById(id);
+            var mappedData = _testControllerRepo.GetMappedTestControllerData(userId, testController2);
 
             if (mappedData == null)
             {
@@ -265,7 +265,7 @@ namespace Automation.Service.Controllers
             }
             else
             {
-                _testControllerRepo.DeleteController2Map(testController2.UserId, testController2.TestCaseID);
+                _testControllerRepo.DeleteController2Map(userId, testController2.TestCaseID);
             }
         }
 

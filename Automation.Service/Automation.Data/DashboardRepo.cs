@@ -40,7 +40,7 @@ namespace Automation.Data
 
         private string GetUserModifiedScript(string tableName)
         {
-            return $"select UserName from UserTable where Id IN (Select UserId from [dbo].[{tableName}] where UpdatedOn IS NOT NULL)";
+            return $"select UserName from UserTable where UserId IN (Select UserId from [dbo].[{tableName}] where UpdatedOn IS NOT NULL)";
         }
 
         public int RecordsModified()

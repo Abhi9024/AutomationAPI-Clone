@@ -34,9 +34,9 @@ namespace Automation.Data
         private string GetInsertScriptForTestController1Map()
         {
             return @"INSERT INTO [dbo].[ModuleController_Map] ([ModuleID],[ModuleSeqID],[MachineID],[MachineSequenceID],[Run],
-                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId], [CreatedOn])
+                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId])
                     VALUES (@ModuleID, @ModuleSeqID, @MachineID, @MachineSequenceID, @Run, 
-                            @LockedByUser, @CreatedOn, @UpdatedOn, @UserId, @CreatedOn )";
+                            @LockedByUser, @CreatedOn, @UpdatedOn, @UserId)";
         }
 
         private string GetUpdateScriptForTestController1()
@@ -76,18 +76,18 @@ namespace Automation.Data
             return @"INSERT INTO [dbo].[TestController] ([FeatureID],[TestCaseID],[Run],[Iterations],
                                                       [Browsers],[SequenceID],[TestType],[JiraID],[StepsCount],[TestScriptName],[TestScriptDescription],
                                                       [StatusID],[CUDStatusID],[IsLocked],
-                     [LockedByUser], [CreatedOn], [UpdatedOn])
+                     [LockedByUser], [CreatedOn], [UpdatedOn],[UserId])
                     VALUES (@FeatureID,@TestCaseID,@Run,@Iterations,@Browsers,@SequenceID,@TestType,@JIRA_ID,@StepsCount,@TestScriptName,
-                            @TestScriptDescription,@StatusID, @CUDStatusID, @IsLocked, @LockedByUser, @CreatedOn, @UpdatedOn)";
+                            @TestScriptDescription,@StatusID, @CUDStatusID, @IsLocked, @LockedByUser, @CreatedOn, @UpdatedOn, @UserId)";
         }
 
         private string GetInsertScriptForTestController2Map()
         {
             return @"INSERT INTO [dbo].[TestController_Map] ([FeatureID],[TestCaseID],[Run],[Iterations],
                                                       [Browsers],[SequenceID],[TestType],[JiraID],[StepsCount],[TestScriptName],[TestScriptDescription],
-                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId], [CreatedOn])
+                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId])
                     VALUES (@FeatureID,@TestCaseID,@Run,@Iterations,@Browsers,@SequenceID,@TestType,@JIRA_ID,@StepsCount,@TestScriptName,
-                            @TestScriptDescription, @LockedByUser, @CreatedOn, @UpdatedOn,@UserId,@CreatedOn)";
+                            @TestScriptDescription, @LockedByUser, @CreatedOn, @UpdatedOn,@UserId)";
         }
 
         private string GetUpdateScriptForTestController2()
@@ -107,7 +107,7 @@ namespace Automation.Data
                      SET  [FeatureID] = @FeatureID,[TestCaseID] =@TestCaseID ,[Run] =@Run,[Iterations] = @Iterations,
                           [Browsers] =@Browsers,[SequenceID] =@SequenceID,[TestType]=@TestType,[JiraID]=@JIRA_ID,
                           [StepsCount]=@StepsCount,[TestScriptName]=@TestScriptName,
-                          [TestScriptDescription]=@TestScriptDescription,[LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn
+                          [TestScriptDescription]=@TestScriptDescription,[LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn,
                           [UserId]=@UserId
                      WHERE [TestCaseID]=@TestCaseID and [UserId]=@UserId";
         }
@@ -195,7 +195,6 @@ namespace Automation.Data
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
-                parameters.Add("@CreatedOn", DateTime.UtcNow);
 
                 con.Query($"{GetInsertScriptForTestController1Map()}",
                     parameters,
@@ -215,7 +214,7 @@ namespace Automation.Data
                 parameters.Add("@Browsers", controller2.Browsers);
                 parameters.Add("@SequenceID", controller2.SequenceID);
                 parameters.Add("@TestType", controller2.TestType);
-                parameters.Add("@JIRA_ID", controller2.JIRA_ID);
+                parameters.Add("@JIRA_ID", controller2.JiraID);
                 parameters.Add("@StepsCount", controller2.StepsCount);
                 parameters.Add("@TestScriptName", controller2.TestScriptName);
                 parameters.Add("@TestScriptDescription", controller2.TestScriptDescription);
@@ -225,6 +224,7 @@ namespace Automation.Data
                 parameters.Add("@LockedByUser", controller2.LockedByUser);
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
+                parameters.Add("@UserId", controller2.UserId);
 
 
                 con.Query($"{GetInsertScriptForTestController2()}",
@@ -245,7 +245,7 @@ namespace Automation.Data
                 parameters.Add("@Browsers", controller2.Browsers);
                 parameters.Add("@SequenceID", controller2.SequenceID);
                 parameters.Add("@TestType", controller2.TestType);
-                parameters.Add("@JIRA_ID", controller2.JIRA_ID ?? " ");
+                parameters.Add("@JIRA_ID", controller2.JiraID ?? " ");
                 parameters.Add("@StepsCount", controller2.StepsCount);
                 parameters.Add("@TestScriptName", controller2.TestScriptName);
                 parameters.Add("@TestScriptDescription", controller2.TestScriptDescription);
@@ -253,7 +253,6 @@ namespace Automation.Data
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
-                parameters.Add("@CreatedOn", DateTime.UtcNow);
 
                 con.Query($"{GetInsertScriptForTestController2Map()}",
                     parameters,
@@ -450,7 +449,7 @@ namespace Automation.Data
                 parameters.Add("@Browsers", controller2.Browsers);
                 parameters.Add("@SequenceID", controller2.SequenceID);
                 parameters.Add("@TestType", controller2.TestType);
-                parameters.Add("@JIRA_ID", controller2.JIRA_ID);
+                parameters.Add("@JIRA_ID", controller2.JiraID);
                 parameters.Add("@StepsCount", controller2.StepsCount);
                 parameters.Add("@TestScriptName", controller2.TestScriptName);
                 parameters.Add("@TestScriptDescription", controller2.TestScriptDescription);
@@ -479,11 +478,10 @@ namespace Automation.Data
                 parameters.Add("@Browsers", controller2.Browsers);
                 parameters.Add("@SequenceID", controller2.SequenceID);
                 parameters.Add("@TestType", controller2.TestType);
-                parameters.Add("@JIRA_ID", controller2.JIRA_ID);
+                parameters.Add("@JIRA_ID", controller2.JiraID);
                 parameters.Add("@StepsCount", controller2.StepsCount);
                 parameters.Add("@TestScriptName", controller2.TestScriptName);
                 parameters.Add("@TestScriptDescription", controller2.TestScriptDescription);
-               
                 parameters.Add("@LockedByUser", controller2.LockedByUser);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
