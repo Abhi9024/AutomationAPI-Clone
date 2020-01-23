@@ -76,9 +76,9 @@ namespace Automation.Data
             return @"INSERT INTO [dbo].[TestController] ([FeatureID],[TestCaseID],[Run],[Iterations],
                                                       [Browsers],[SequenceID],[TestType],[JiraID],[StepsCount],[TestScriptName],[TestScriptDescription],
                                                       [StatusID],[CUDStatusID],[IsLocked],
-                     [LockedByUser], [CreatedOn], [UpdatedOn],[UserId])
+                     [LockedByUser], [CreatedOn], [UpdatedOn])
                     VALUES (@FeatureID,@TestCaseID,@Run,@Iterations,@Browsers,@SequenceID,@TestType,@JIRA_ID,@StepsCount,@TestScriptName,
-                            @TestScriptDescription,@StatusID, @CUDStatusID, @IsLocked, @LockedByUser, @CreatedOn, @UpdatedOn, @UserId)";
+                            @TestScriptDescription,@StatusID, @CUDStatusID, @IsLocked, @LockedByUser, @CreatedOn, @UpdatedOn)";
         }
 
         private string GetInsertScriptForTestController2Map()
@@ -224,7 +224,6 @@ namespace Automation.Data
                 parameters.Add("@LockedByUser", controller2.LockedByUser);
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
-                parameters.Add("@UserId", controller2.UserId);
 
 
                 con.Query($"{GetInsertScriptForTestController2()}",

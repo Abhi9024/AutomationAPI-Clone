@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Automation.Core.DataAccessAbstractions;
 using Automation.Service.ViewModel;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,19 +16,22 @@ namespace Automation.Service.Controllers.Authentication
     public class AuthController : ControllerBase
     {
         private IAuthProvider _authProvider;
+        private IMapper _mapper;
 
-        public AuthController(IAuthProvider authProvider)
+        public AuthController(IAuthProvider authProvider,IMapper mapper)
         {
             _authProvider = authProvider;
+            _mapper = mapper;
         }
         
         // POST api/values
         [HttpPost("Login")]
-        public int Login([FromBody]UserVM user)
+        public UserVM Login([FromBody]UserVM user)
         {
-            var userId = _authProvider.ValidateLogin(user.UserName,user.Password);
-            return userId;
+            var userData = _authProvider.ValidateLogin(user.UserName,user.Password);
+            return  _mapper.Map<UserVM>(userData);
         }
+
 
         // POST api/values
         [HttpPost("CreateUser")]

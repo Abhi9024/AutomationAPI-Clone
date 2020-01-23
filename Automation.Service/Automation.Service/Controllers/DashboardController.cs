@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Automation.Core.DataAccessAbstractions;
 using Automation.Core;
+using AutoMapper;
+using Automation.Service.ViewModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,11 +17,13 @@ namespace Automation.Service.Controllers
     {
         private IGenericRepo<UserTable> _genericRepo;
         private IDashboardRepo _dashboardRepo;
+        private IMapper _mapper;
 
-        public DashboardController(IGenericRepo<UserTable> genericRepo, IDashboardRepo dashboardRepo)
+        public DashboardController(IGenericRepo<UserTable> genericRepo, IDashboardRepo dashboardRepo,IMapper mapper)
         {
             _genericRepo = genericRepo;
             _dashboardRepo = dashboardRepo;
+            _mapper = mapper;
         }
         
         // GET: api/User/GetActiveUsers
@@ -46,6 +50,13 @@ namespace Automation.Service.Controllers
             }
 
             return feeds.ToArray();
+        }
+
+        [HttpGet("GetAllRoles")]
+        public List<RoleVM> GetAllRoles()
+        {
+           var roles = _mapper.Map<List<RoleVM>>(_dashboardRepo.GetAllRoles());
+           return roles;
         }
     }
 }

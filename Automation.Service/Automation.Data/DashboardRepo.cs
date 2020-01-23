@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using Automation.Core;
 
 namespace Automation.Data
 {
@@ -55,6 +56,20 @@ namespace Automation.Data
                 }
             }
             return result;
+        }
+
+        private string GetAllRolesScript()
+        {
+            return @"select * from [dbo].[UserRole]";
+        }
+
+        public List<UserRole> GetAllRoles()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                 var result = (con.Query<UserRole>($"{GetAllRolesScript()}", commandType: CommandType.Text)).ToList();
+                return result;
+            }
         }
     }
 }

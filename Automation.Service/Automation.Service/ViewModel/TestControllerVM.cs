@@ -38,11 +38,10 @@ namespace Automation.Service.ViewModel
 
     public class TestControllerVM : BaseEntityVM
     {
-        public int SNo { get; set; }
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }
-        public int Iterations { get; set; }
+        public string Iterations { get; set; }
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }
@@ -65,7 +64,7 @@ namespace Automation.Service.ViewModel
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }
-        public int Iterations { get; set; }
+        public string Iterations { get; set; }
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }

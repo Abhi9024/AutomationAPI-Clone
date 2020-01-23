@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Dapper;
 using System.Linq;
+using Automation.Core;
 
 namespace Automation.Data.Auth
 {
@@ -30,7 +31,7 @@ namespace Automation.Data.Auth
 
         private string GetUserValidateScript()
         {
-            return @"Select UserId from [dbo].[UserTable] where [UserName] = @UserName and [Password] = @Password";
+            return @"Select * from [dbo].[UserTable] where [UserName] = @UserName and [Password] = @Password";
         }
 
         public string ComputeHash(string input)
@@ -57,7 +58,7 @@ namespace Automation.Data.Auth
             }
         }
 
-        public int ValidateLogin(string userName, string password)
+        public UserTable ValidateLogin(string userName, string password)
         {
             var hashedPassword = ComputeHash(password);
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -66,10 +67,10 @@ namespace Automation.Data.Auth
                 parameters.Add("@UserName", userName);
                 parameters.Add("@Password", hashedPassword);
 
-               var userId =  con.Query<int>($"{GetUserValidateScript()}",
+               var user =  con.Query<UserTable>($"{GetUserValidateScript()}",
                     parameters,
                     commandType: CommandType.Text).FirstOrDefault();
-                return userId;
+                return user;
             }
         }
     }

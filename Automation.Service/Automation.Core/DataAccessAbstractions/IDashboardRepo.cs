@@ -8,5 +8,6 @@ namespace Automation.Core.DataAccessAbstractions
     {
         int RecordsModified();
         string[] ModifiedFeeds();
+        List<UserRole> GetAllRoles();
     }
 }

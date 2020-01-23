@@ -58,6 +58,10 @@ namespace Automation.Service.Controllers
                         value.Run = item.Run;
                         value.LockedByUser = item.LockedByUser;
                         value.UserId = item.UserId;
+                        value.CreatedOn = item.CreatedOn;
+                        value.UpdatedOn = item.UpdatedOn;
+                        value.MachineID = item.MachineID;
+                        value.ModuleSeqID = item.ModuleSeqID;
                     }
                 }
             }
@@ -97,6 +101,14 @@ namespace Automation.Service.Controllers
                         value.SequenceID = item.SequenceID;
                         value.LockedByUser = item.LockedByUser;
                         value.UserId = item.UserId;
+                        value.Browsers = item.Browsers;
+                        value.CreatedOn = item.CreatedOn;
+                        value.UpdatedOn = item.UpdatedOn;
+                        value.FeatureID = item.FeatureID;
+                        value.Iterations = item.Iterations;
+                        value.StepsCount = item.StepsCount;
+                        value.TestScriptName = item.TestScriptName;
+                        value.TestType = item.TestType;
                     }
                 }
             }

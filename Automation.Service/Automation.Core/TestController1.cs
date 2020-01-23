@@ -17,7 +17,6 @@ namespace Automation.Core
         public int? LockedByUser { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public int? UserId { get; set; }
     }
 
     public class ModuleController_Map : BaseEntity
@@ -38,7 +37,7 @@ namespace Automation.Core
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }
-        public int Iterations { get; set; }
+        public string Iterations { get; set; }
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }
@@ -52,7 +51,6 @@ namespace Automation.Core
         public int? LockedByUser { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public int? UserId { get; set; }
     }
 
     public class TestController_Map : BaseEntity
@@ -60,7 +58,7 @@ namespace Automation.Core
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }
-        public int Iterations { get; set; }
+        public string Iterations { get; set; }
         public string Browsers { get; set; }
         public int SequenceID { get; set; }
         public string TestType { get; set; }

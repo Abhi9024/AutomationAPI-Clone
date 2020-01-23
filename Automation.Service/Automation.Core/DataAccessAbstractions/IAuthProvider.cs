@@ -6,7 +6,7 @@ namespace Automation.Core.DataAccessAbstractions
 {
     public interface IAuthProvider
     {
-        int ValidateLogin(string userName, string password);
+        UserTable ValidateLogin(string userName, string password);
         void CreateUser(string userName, string password);
         string ComputeHash(string input);
     }
