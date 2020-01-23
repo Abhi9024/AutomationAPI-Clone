@@ -82,6 +82,12 @@ namespace Automation.Service.Controllers
             return _genericRepo.GetRecordsCount();
         }
 
+        [HttpGet("GetAllModuleID")]
+        public List<string> GetAllModuleID()
+        {
+            return _testControllerRepo.GetAllModuleID();
+        }
+
         [EnableQuery]
         [HttpGet("GetAllTestController/{userId}")]
         public IList<TestControllerVM> GetAllTestController(int userId)

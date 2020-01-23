@@ -6,6 +6,7 @@ namespace Automation.Core
 {
     public class KeywordLibrary : BaseEntity
     {
+       
         public string Module { get; set; }
         public string FunctionName { get; set; }
         public string StepDescription { get; set; }
@@ -43,6 +44,7 @@ namespace Automation.Core
 
     public class KeywordLibrary_Map: BaseEntity
     {
+        public int MasterKeywordID { get; set; }
         public string Module { get; set; }
         public string FunctionName { get; set; }
         public string StepDescription { get; set; }

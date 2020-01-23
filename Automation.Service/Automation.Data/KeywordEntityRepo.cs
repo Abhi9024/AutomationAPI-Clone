@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Automation.Data
 {
@@ -35,10 +36,10 @@ namespace Automation.Data
 
         private string GetInsertScriptMap()
         {
-            return @"INSERT INTO [dbo].[KeywordLibrary_Map] ([Module],[FunctionName],[StepDescription],[ActionOrKeyword],[ObjectLogicalName],[Run],
+            return @"INSERT INTO [dbo].[KeywordLibrary_Map] ([MasterKeywordID],[Module],[FunctionName],[StepDescription],[ActionOrKeyword],[ObjectLogicalName],[Run],
                      Param1, Param2, Param3, Param4, Param5, Param6, Param8, Param7, Param9, Param10,
                      Param11, Param12, Param13, Param14, Param15, Param16, Param17, Param18, Param19, Param20, [LockedByUser], [CreatedOn], [UpdatedOn],[UserId])
-                    VALUES (@Module, @FunctionName, @StepDescription, @ActionOrKeyword, @ObjectLogicalName, @Run, 
+                    VALUES (@MasterKeywordID,@Module, @FunctionName, @StepDescription, @ActionOrKeyword, @ObjectLogicalName, @Run, 
                             @Param1, @Param2, @Param3, @Param4, @Param5, @Param6, @Param8, @Param7, @Param9, @Param10,
                             @Param11, @Param12, @Param13, @Param14, @Param15, @Param16, @Param17, @Param18, @Param19, @Param20,
                             @LockedByUser, @CreatedOn, @UpdatedOn, @UserId)";
@@ -47,7 +48,7 @@ namespace Automation.Data
         private string GetUpdateScript()
         {
             return @"UPDATE [dbo].[KeywordLibrary]
-                     SET [FunctionName]=@FunctionName,[StepDescription]=@StepDescription,[ActionOrKeyword]= @ActionOrKeyword,[ObjectLogicalName]=@ObjectLogicalName,[Run]=@Run,
+                     SET  [FunctionName]=@FunctionName,[StepDescription]=@StepDescription,[ActionOrKeyword]= @ActionOrKeyword,[ObjectLogicalName]=@ObjectLogicalName,[Run]=@Run,
                           Param1 = @Param1, Param2 = @Param2, Param3 = @Param3, Param4 = @Param4, Param5 = @Param5, Param6 = @Param6, Param8 = @Param8, 
                           Param7 = @Param7, Param9 = @Param9, Param10 = @Param10,Param11 = @Param11, Param12 = @Param12, Param13 = @Param13, Param14 = @Param14, Param15 = @Param15, 
                           Param16 = @Param16, Param17 = @Param17, Param18 = @Param18, Param19 = @Param19, Param20 = @Param20,[Module]=@Module,
@@ -58,12 +59,12 @@ namespace Automation.Data
         private string GetUpdateScriptMap()
         {
             return @"UPDATE [dbo].[KeywordLibrary_Map]
-                     SET [FunctionName]=@FunctionName,[StepDescription]=@StepDescription,[ActionOrKeyword]= @ActionOrKeyword,[ObjectLogicalName]=@ObjectLogicalName,[Run]=@Run,
+                     SET  [MasterKeywordID]=@MasterKeywordID,[FunctionName]=@FunctionName,[StepDescription]=@StepDescription,[ActionOrKeyword]= @ActionOrKeyword,[ObjectLogicalName]=@ObjectLogicalName,[Run]=@Run,
                           Param1 = @Param1, Param2 = @Param2, Param3 = @Param3, Param4 = @Param4, Param5 = @Param5, Param6 = @Param6, Param8 = @Param8, 
                           Param7 = @Param7, Param9 = @Param9, Param10 = @Param10,Param11 = @Param11, Param12 = @Param12, Param13 = @Param13, Param14 = @Param14, Param15 = @Param15, 
                           Param16 = @Param16, Param17 = @Param17, Param18 = @Param18, Param19 = @Param19, Param20 = @Param20,[Module]=@Module,
                           [LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn,[UserId]=@UserId
-                     WHERE [FunctionName]=@FunctionName and [UserId]=@UserId";
+                     WHERE [MasterKeywordID]=@MasterKeywordID and [UserId]=@UserId";
         }
 
         private string GetUpdateLockedByUserScript()
@@ -83,7 +84,23 @@ namespace Automation.Data
         private string GetDeleteScriptMap()
         {
             return @"DELETE FROM [dbo].[KeywordLibrary_Map]
-                     WHERE [FunctionName]=@FunctionName and [UserId]=@UserId";
+                     WHERE [MasterKeywordID]=@MasterKeywordID and [UserId]=@UserId";
+        }
+
+        private string GetFilteredKeywordsScript()
+        {
+
+            return @"SELECT * FROM [dbo].[KeywordLibrary] where [ID] NOT IN @Ids";
+        }
+
+        private string GetDataScriptFromKeywordLibraryMap()
+        {
+            return @"Select * from [dbo].[KeywordLibrary_Map] where [UserId]=@UserId and [MasterKeywordID]=@MasterKeywordID";
+        }
+
+        private string GetAllFunctionNamesScript()
+        {
+            return @"SELECT DISTINCT [FunctionName] FROM [dbo].[KeywordLibrary]";
         }
 
         public void CreateKeyword(KeywordLibrary keyword)
@@ -125,7 +142,7 @@ namespace Automation.Data
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", keyword.UserId);
 
-                con.Query($"{GetInsertScript()}",
+               con.Query($"{GetInsertScript()}",
                     parameters,
                     commandType: CommandType.Text);
             }
@@ -213,6 +230,7 @@ namespace Automation.Data
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@MasterKeywordID", keyword.MasterKeywordID);
                 parameters.Add("@FunctionName", keyword.FunctionName);
                 parameters.Add("@StepDescription", keyword.StepDescription);
                 parameters.Add("@ActionOrKeyword", keyword.ActionOrKeyword);
@@ -255,6 +273,7 @@ namespace Automation.Data
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@MasterKeywordID", keyword.MasterKeywordID);
                 parameters.Add("@FunctionName", keyword.FunctionName);
                 parameters.Add("@StepDescription", keyword.StepDescription);
                 parameters.Add("@ActionOrKeyword", keyword.ActionOrKeyword);
@@ -291,17 +310,55 @@ namespace Automation.Data
             }
         }
 
-        public void DeleteKeywordMap(int? userId, string functionName)
+        public void DeleteKeywordMap(int? userId, int masterKeywordId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@FunctionName", functionName);
+                parameters.Add("@MasterKeywordID", masterKeywordId);
                 parameters.Add("@UserId", userId);
 
                 con.Query($"{GetDeleteScriptMap()}",
                     parameters,
                     commandType: CommandType.Text);
+            }
+        }
+
+        public List<KeywordLibrary> GetFilteredKeywords(List<int> Ids)
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var parameters = new { Ids = Ids };
+                var result = (List<KeywordLibrary>)con.Query<KeywordLibrary>($"{GetFilteredKeywordsScript()}",
+                   parameters,
+                    commandType: CommandType.Text);
+                return result;
+            }
+        }
+
+        public KeywordLibrary_Map GetMappedKeywordLibrary(int id, int? userId)
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@MasterKeywordID", id);
+                parameters.Add("@UserId", userId);
+
+                var result = con.Query<KeywordLibrary_Map>($"{GetDataScriptFromKeywordLibraryMap()}",
+                    parameters,
+                    commandType: CommandType.Text).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public List<string> GetAllFunctionNames()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var result = (List<string>)con.Query<string>($"{GetAllFunctionNamesScript()}",
+                    commandType: CommandType.Text);
+
+                return result;
             }
         }
     }

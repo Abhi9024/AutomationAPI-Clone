@@ -125,6 +125,7 @@ namespace Automation.Service.ViewModel
 
     public class TestScript_MapVM: BaseEntityVM
     {
+        public int MasterTestScriptID { get; set; }
         public string TestCaseID { get; set; }
         public string TCStepID { get; set; }
         public string TestScriptName { get; set; }

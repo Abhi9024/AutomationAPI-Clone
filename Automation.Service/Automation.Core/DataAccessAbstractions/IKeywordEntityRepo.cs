@@ -11,7 +11,10 @@ namespace Automation.Core.DataAccessAbstractions
         void UpdateKeyword(int keywordId, KeywordLibrary keyword);
         void UpdateKeywordMap(int? userId, KeywordLibrary_Map keyword);
         void DeleteKeyword(int keywordId,int userId);
-        void DeleteKeywordMap(int? userId,string functionName);
+        void DeleteKeywordMap(int? userId,int masterKeywordId);
         void UpdateLockedByFlags(KeywordLibrary keyword);
+        List<KeywordLibrary> GetFilteredKeywords(List<int> Ids);
+        KeywordLibrary_Map GetMappedKeywordLibrary(int id, int? userId);
+        List<string> GetAllFunctionNames();
     }
 }

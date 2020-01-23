@@ -54,6 +54,11 @@ namespace Automation.Data
                      WHERE ID=@Id";
         }
 
+        private string GetAllLogicalNamesScript()
+        {
+            return @"SELECT DISTINCT [LogicalName] FROM [dbo].[Repository]";
+        }
+
         public void CreateRepository(Repository repositoryEntity)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -134,6 +139,17 @@ namespace Automation.Data
                 con.Query($"{GetUpdateLockedByUserScript()}",
                     parameters,
                     commandType: CommandType.Text);
+            }
+        }
+
+        public List<string> GetAllLogicalNames()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var result = (List<string>)con.Query<string>($"{GetAllLogicalNamesScript()}",
+                    commandType: CommandType.Text);
+
+                return result;
             }
         }
     }

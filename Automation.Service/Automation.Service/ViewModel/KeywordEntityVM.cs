@@ -34,6 +34,7 @@ namespace Automation.Service.ViewModel
 
     public class KeywordEntity_MapVM : BaseEntityVM
     {
+        public int MasterKeywordID { get; set; }
         public string Module { get; set; }
         public string FunctionName { get; set; }
         public string StepDescription { get; set; }

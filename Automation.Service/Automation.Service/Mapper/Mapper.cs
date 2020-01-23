@@ -13,23 +13,33 @@ namespace Automation.Service.Mapper
         public Mapper()
         {
             CreateMap<BaseEntity, BaseEntityVM>().ReverseMap();
+
             CreateMap<TestScripts, TestScriptVM>().ReverseMap();
-            CreateMap<ModuleController, ModuleControllerVM>()
-                .ReverseMap();
-            CreateMap<ModuleController_Map, ModuleController_MapVM>()
-               .ReverseMap();
+            CreateMap<TestScripts_Map, TestScript_MapVM>().ReverseMap();
+            CreateMap<TestScript_MapVM, TestScriptVM>().ReverseMap();
+
+            CreateMap<ModuleController, ModuleControllerVM>().ReverseMap();
+            CreateMap<ModuleController_Map, ModuleController_MapVM>().ReverseMap();
             CreateMap<ModuleController_MapVM, ModuleControllerVM>().ReverseMap();
+
             CreateMap<TestController, TestControllerVM>().ReverseMap();
             CreateMap<TestController_Map, TestController_MapVM>().ReverseMap();
             CreateMap<TestController_MapVM, TestControllerVM>().ReverseMap();
+
             CreateMap<BrowserVMExec, BrowserControllerVM>()
                 .ForMember(dest => dest.Exec, opt => opt.MapFrom(src => src.Run))
                 .ReverseMap();
 
-            CreateMap<KeywordLibrary, KeywordEntityVM>()
+            CreateMap<KeywordLibrary, KeywordEntityVM>().ReverseMap();
+            CreateMap<KeywordLibrary_Map, KeywordEntity_MapVM>().ReverseMap();
+            CreateMap<KeywordEntity_MapVM, KeywordEntityVM>()
+                .ForMember(dest=>dest.ID,opt=>opt.MapFrom(src=>src.MasterKeywordID))
                 .ReverseMap();
+
             CreateMap<Repository, RepositoryEntityVM>().ReverseMap();
+
             CreateMap<TestData, TestDataVM>().ReverseMap();
+
             CreateMap<UserTable, UserVM>().ReverseMap();
         }
     }

@@ -157,6 +157,11 @@ namespace Automation.Data
             return @"Select * from [dbo].[TestController_Map] where [UserId]=@UserId and [TestCaseID]=@TestCaseID";
         }
 
+        private string GetAllModuleIDScript()
+        {
+            return @"SELECT DISTINCT [ModuleID] FROM [dbo].[ModuleController]";
+        }
+
         public void CreateController1(ModuleController controller1)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -510,6 +515,17 @@ namespace Automation.Data
                 con.Query($"{GetUpdateScriptForTestController3()}",
                     parameters,
                     commandType: CommandType.Text);
+            }
+        }
+
+        public List<string> GetAllModuleID()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var result = (List<string>) con.Query<string>($"{GetAllModuleIDScript()}",
+                    commandType: CommandType.Text);
+
+                return result;
             }
         }
     }

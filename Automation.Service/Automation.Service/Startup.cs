@@ -91,6 +91,8 @@ namespace Automation.Service
             services.AddTransient<IGenericRepo<KeywordLibrary>, GenericRepo<KeywordLibrary>>();
             services.AddTransient<IGenericRepo<TestData>, GenericRepo<TestData>>();
             services.AddTransient<IGenericRepo<Repository>, GenericRepo<Repository>>();
+            services.AddTransient<IGenericRepo<KeywordLibrary_Map>, GenericRepo<KeywordLibrary_Map>>();
+            services.AddTransient<IGenericRepo<TestScripts_Map>, GenericRepo<TestScripts_Map>>();
             services.AddTransient<ITestControllerRepo, TestControllerRepo>();
             services.AddTransient<IKeywordEntityRepo, KeywordEntityRepo>();
             services.AddTransient<IRepositoryEntityRepo, RepositoryEntityRepo>();

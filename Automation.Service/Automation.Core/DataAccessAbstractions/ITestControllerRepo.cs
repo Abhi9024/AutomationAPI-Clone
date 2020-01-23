@@ -13,8 +13,9 @@ namespace Automation.Core.DataAccessAbstractions
         void DeleteController1(int controllerId);
         void DeleteController1Map(int? userId, string moduleId);
         ModuleController_Map GetMappedModuleData(int? userId, ModuleController controller1);
-        TestController_Map GetMappedTestControllerData(int? userId, TestController controller2);
+        List<string> GetAllModuleID();
 
+        TestController_Map GetMappedTestControllerData(int? userId, TestController controller2);
         void CreateController2(TestController controller2);
         void CreateController2Map(int? userId,TestController controller2);
         void UpdateController2(int controllerId, TestController controller2);

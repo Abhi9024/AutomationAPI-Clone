@@ -86,5 +86,11 @@ namespace Automation.Service.Controllers
         {
             return _genericRepo.GetRecordsCount();
         }
+
+        [HttpGet("GetAllLogicalNames")]
+        public List<string> GetAllLogicalNames()
+        {
+            return _repositoryEntityRepo.GetAllLogicalNames();
+        }
     }
 }

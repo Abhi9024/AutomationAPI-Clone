@@ -122,6 +122,7 @@ namespace Automation.Core
 
     public class TestScripts_Map : BaseEntity
     {
+        public int MasterTestScriptID { get; set; }
         public string TestCaseID { get; set; }
         public string TCStepID { get; set; }
         public string TestScriptName { get; set; }
