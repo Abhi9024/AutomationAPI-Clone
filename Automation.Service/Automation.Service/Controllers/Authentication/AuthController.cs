@@ -37,7 +37,7 @@ namespace Automation.Service.Controllers.Authentication
         [HttpPost("CreateUser")]
         public string CreateUser([FromBody]UserVM user)
         {
-            _authProvider.CreateUser(user.UserName, user.Password);
+            _authProvider.CreateUser(user.UserName, user.Password,user.RoleId);
             return @"User Created Succesfully!";
         }
         

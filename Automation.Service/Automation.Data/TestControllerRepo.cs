@@ -34,9 +34,9 @@ namespace Automation.Data
         private string GetInsertScriptForTestController1Map()
         {
             return @"INSERT INTO [dbo].[ModuleController_Map] ([ModuleID],[ModuleSeqID],[MachineID],[MachineSequenceID],[Run],
-                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId])
+                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId],[RefId])
                     VALUES (@ModuleID, @ModuleSeqID, @MachineID, @MachineSequenceID, @Run, 
-                            @LockedByUser, @CreatedOn, @UpdatedOn, @UserId)";
+                            @LockedByUser, @CreatedOn, @UpdatedOn, @UserId,@RefId)";
         }
 
         private string GetUpdateScriptForTestController1()
@@ -54,7 +54,7 @@ namespace Automation.Data
             return @"UPDATE [dbo].[ModuleController_Map]
                      SET  [ModuleID] =  @ModuleID,[ModuleSeqID] = @ModuleSeqID,
                           [MachineID] = @MachineID,[MachineSequenceID] = @MachineSequenceID,[Run] = @Run,
-                          [LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn,[UserId]=@UserId
+                          [LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn,[UserId]=@UserId,[RefId]=@RefId
                      WHERE [ModuleID]=@ModuleID and [UserId]=@UserId";
         }
 
@@ -68,7 +68,7 @@ namespace Automation.Data
         private string GetDeleteScriptForTestController1Map()
         {
             return @"DELETE FROM [dbo].[ModuleController_Map]
-                     WHERE [ModuleID]=@ModuleID and [UserId]=@UserId";
+                     WHERE [ModuleID]=@ModuleID and [UserId]=@UserId and [RefId]=@RefId";
         }
 
         private string GetInsertScriptForTestController2()
@@ -85,9 +85,9 @@ namespace Automation.Data
         {
             return @"INSERT INTO [dbo].[TestController_Map] ([FeatureID],[TestCaseID],[Run],[Iterations],
                                                       [Browsers],[SequenceID],[TestType],[JiraID],[StepsCount],[TestScriptName],[TestScriptDescription],
-                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId])
+                     [LockedByUser], [CreatedOn], [UpdatedOn], [UserId],[RefId])
                     VALUES (@FeatureID,@TestCaseID,@Run,@Iterations,@Browsers,@SequenceID,@TestType,@JIRA_ID,@StepsCount,@TestScriptName,
-                            @TestScriptDescription, @LockedByUser, @CreatedOn, @UpdatedOn,@UserId)";
+                            @TestScriptDescription, @LockedByUser, @CreatedOn, @UpdatedOn,@UserId,@RefId)";
         }
 
         private string GetUpdateScriptForTestController2()
@@ -108,7 +108,7 @@ namespace Automation.Data
                           [Browsers] =@Browsers,[SequenceID] =@SequenceID,[TestType]=@TestType,[JiraID]=@JIRA_ID,
                           [StepsCount]=@StepsCount,[TestScriptName]=@TestScriptName,
                           [TestScriptDescription]=@TestScriptDescription,[LockedByUser]=@LockedByUser, [UpdatedOn]=@UpdatedOn,
-                          [UserId]=@UserId
+                          [UserId]=@UserId,[RefId]=@RefId
                      WHERE [TestCaseID]=@TestCaseID and [UserId]=@UserId";
         }
 
@@ -122,7 +122,7 @@ namespace Automation.Data
         private string GetDeleteScriptForTestController2Map()
         {
             return @"DELETE FROM [dbo].[TestController_Map]
-                     WHERE [TestCaseID]=@TestCaseID and [UserId]=@UserId";
+                     WHERE [TestCaseID]=@TestCaseID and [UserId]=@UserId and [RefId]=@RefId";
         }
 
         private string GetInsertScriptForTestController3()
@@ -149,12 +149,12 @@ namespace Automation.Data
 
         private string GetDataScriptFromModuleControllerMap()
         {
-            return @"Select * from [dbo].[ModuleController_Map] where [UserId]=@UserId and [ModuleID]=@ModuleID";
+            return @"Select * from [dbo].[ModuleController_Map] where [UserId]=@UserId and [ModuleID]=@ModuleID and [RefId]=@RefId";
         }
 
         private string GetDataScriptFromTestControllerMap()
         {
-            return @"Select * from [dbo].[TestController_Map] where [UserId]=@UserId and [TestCaseID]=@TestCaseID";
+            return @"Select * from [dbo].[TestController_Map] where [UserId]=@UserId and [TestCaseID]=@TestCaseID and [RefId]=@RefId";
         }
 
         private string GetAllModuleIDScript()
@@ -186,7 +186,7 @@ namespace Automation.Data
             }
         }
 
-        public void CreateController1Map(int? userId, ModuleController controller1)
+        public void CreateController1Map(int? userId, ModuleController controller1, int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -200,6 +200,7 @@ namespace Automation.Data
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 con.Query($"{GetInsertScriptForTestController1Map()}",
                     parameters,
@@ -237,7 +238,7 @@ namespace Automation.Data
             }
         }
 
-        public void CreateController2Map(int? userId, TestController controller2)
+        public void CreateController2Map(int? userId, TestController controller2,int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -257,6 +258,7 @@ namespace Automation.Data
                 parameters.Add("@CreatedOn", DateTime.UtcNow);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 con.Query($"{GetInsertScriptForTestController2Map()}",
                     parameters,
@@ -301,15 +303,14 @@ namespace Automation.Data
             }
         }
 
-        public void DeleteController1Map(int? userId, string moduleId)
+        public void DeleteController1Map(int? userId, string moduleId,int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@StatusID", (int)Status.InActive);
-                parameters.Add("@CUDStatusID", (int)CUDStatus.Deleted);
                 parameters.Add("@ModuleID", moduleId);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 con.Query($"{GetDeleteScriptForTestController1Map()}",
                     parameters,
@@ -332,15 +333,14 @@ namespace Automation.Data
             }
         }
 
-        public void DeleteController2Map(int? userId, string testCaseID)
+        public void DeleteController2Map(int? userId, string testCaseID,int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@StatusID", (int)Status.InActive);
-                parameters.Add("@CUDStatusID", (int)CUDStatus.Deleted);
                 parameters.Add("@TestCaseID", testCaseID);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 con.Query($"{GetDeleteScriptForTestController2Map()}",
                     parameters,
@@ -387,13 +387,14 @@ namespace Automation.Data
             }
         }
 
-        public ModuleController_Map GetMappedModuleData(int? userId, ModuleController controller1)
+        public ModuleController_Map GetMappedModuleData(int? userId, ModuleController controller1,int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@ModuleID", controller1.ModuleID);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 var result = con.Query<ModuleController_Map>($"{GetDataScriptFromModuleControllerMap()}",
                      parameters,
@@ -417,6 +418,7 @@ namespace Automation.Data
                 parameters.Add("@LockedByUser", controller1.LockedByUser);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", controller1.RefId);
 
                 con.Query($"{GetUpdateScriptForTestController1Map()}",
                     parameters,
@@ -424,13 +426,14 @@ namespace Automation.Data
             }
         }
 
-        public TestController_Map GetMappedTestControllerData(int? userId, TestController controller2)
+        public TestController_Map GetMappedTestControllerData(int? userId, TestController controller2,int refId)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@TestCaseID", controller2.TestCaseID);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", refId);
 
                 var result = con.Query<TestController_Map>($"{GetDataScriptFromTestControllerMap()}",
                      parameters,
@@ -489,6 +492,7 @@ namespace Automation.Data
                 parameters.Add("@LockedByUser", controller2.LockedByUser);
                 parameters.Add("@UpdatedOn", DateTime.UtcNow);
                 parameters.Add("@UserId", userId);
+                parameters.Add("@RefId", controller2.RefId);
 
                 con.Query($"{GetUpdateScriptForTestController2Map()}",
                     parameters,

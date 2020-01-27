@@ -21,6 +21,7 @@ namespace Automation.Core
 
     public class ModuleController_Map : BaseEntity
     {
+        public int RefId { get; set; }
         public string ModuleID { get; set; }
         public int ModuleSeqID { get; set; }
         public string MachineID { get; set; }
@@ -55,6 +56,7 @@ namespace Automation.Core
 
     public class TestController_Map : BaseEntity
     {
+        public int RefId { get; set; }
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }

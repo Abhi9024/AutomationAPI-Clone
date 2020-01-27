@@ -25,8 +25,8 @@ namespace Automation.Data.Auth
 
         private string GetInsertScript()
         {
-            return @"INSERT INTO [dbo].[UserTable] ([UserName],[Password])
-                    VALUES (@UserName, @Password)";
+            return @"INSERT INTO [dbo].[UserTable] ([UserName],[Password],[RoleId])
+                    VALUES (@UserName, @Password,@RoleId)";
         }
 
         private string GetUserValidateScript()
@@ -43,7 +43,7 @@ namespace Automation.Data.Auth
             return hashedPassword;
         }
 
-        public void CreateUser(string userName, string password)
+        public void CreateUser(string userName, string password,int? roleId)
         {
             var hashedPassword = ComputeHash(password);
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -51,6 +51,7 @@ namespace Automation.Data.Auth
                 var parameters = new DynamicParameters();
                 parameters.Add("@UserName", userName);
                 parameters.Add("@Password", hashedPassword);
+                parameters.Add("@RoleId", roleId);
 
                 con.Query($"{GetInsertScript()}",
                     parameters,

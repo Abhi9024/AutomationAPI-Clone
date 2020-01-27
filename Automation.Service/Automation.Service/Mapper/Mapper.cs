@@ -16,7 +16,9 @@ namespace Automation.Service.Mapper
 
             CreateMap<TestScripts, TestScriptVM>().ReverseMap();
             CreateMap<TestScripts_Map, TestScript_MapVM>().ReverseMap();
-            CreateMap<TestScript_MapVM, TestScriptVM>().ReverseMap();
+            CreateMap<TestScript_MapVM, TestScriptVM>()
+                .ForMember(dest=>dest.ID,opt=>opt.MapFrom(src=>src.MasterTestScriptID))
+                .ReverseMap();
 
             CreateMap<ModuleController, ModuleControllerVM>().ReverseMap();
             CreateMap<ModuleController_Map, ModuleController_MapVM>().ReverseMap();
@@ -41,6 +43,7 @@ namespace Automation.Service.Mapper
             CreateMap<TestData, TestDataVM>().ReverseMap();
 
             CreateMap<UserTable, UserVM>().ReverseMap();
+            CreateMap<UserRole, RoleVM>().ReverseMap();
         }
     }
 }

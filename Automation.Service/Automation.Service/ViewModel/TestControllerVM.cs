@@ -24,7 +24,7 @@ namespace Automation.Service.ViewModel
 
     public class ModuleController_MapVM : BaseEntityVM
     {
-        public int SLNO { get; set; }
+        public int RefId { get; set; }
         public string ModuleID { get; set; }
         public int ModuleSeqID { get; set; }
         public string MachineID { get; set; }
@@ -60,7 +60,7 @@ namespace Automation.Service.ViewModel
 
     public class TestController_MapVM : BaseEntityVM
     {
-        public int SNo { get; set; }
+        public int RefId { get; set; }
         public string FeatureID { get; set; }
         public string TestCaseID { get; set; }
         public string Run { get; set; }
