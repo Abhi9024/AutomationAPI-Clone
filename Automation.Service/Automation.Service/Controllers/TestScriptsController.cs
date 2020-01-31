@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.DataProtection;
 using AutoMapper;
 using Automation.Service.ViewModel;
 using Microsoft.AspNet.OData;
+using Microsoft.Extensions.Logging;
 
 namespace Automation.Service.Controllers
 {
@@ -20,15 +21,19 @@ namespace Automation.Service.Controllers
         private IGenericRepo<TestScripts_Map> _genericRepo2;
         private ITestScriptsRepo _testScriptsRepo;
         private IMapper _mapper;
+        private ILogger<TestScriptsController> _logger;
 
         public TestScriptsController(IGenericRepo<TestScripts> genericRepo,
             IGenericRepo<TestScripts_Map> genericRepo2,
-            ITestScriptsRepo testScriptsRepo, IMapper mapper)
+            ITestScriptsRepo testScriptsRepo,
+            IMapper mapper,
+            ILogger<TestScriptsController> logger)
         {
             _genericRepo = genericRepo;
             _genericRepo2 = genericRepo2;
             _testScriptsRepo = testScriptsRepo;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [EnableQuery]
@@ -36,13 +41,22 @@ namespace Automation.Service.Controllers
         public ActionResult<IList<TestScriptVM>> GetScripts(int userId)
         {
             var result = new List<TestScriptVM>();
-            var testScriptMapData = GetAllTestScriptsMap();
-            var mappedIds = testScriptMapData.Where(k => k.UserId == userId).Select(k => k.MasterTestScriptID).ToList();
-            var filteredList = _mapper.Map<List<TestScriptVM>>(_testScriptsRepo.GetFilteredTestScripts(mappedIds));
+            try
+            {
+                result = new List<TestScriptVM>();
+                var testScriptMapData = GetAllTestScriptsMap();
+                var mappedIds = testScriptMapData.Where(k => k.UserId == userId).Select(k => k.MasterTestScriptID).ToList();
+                var filteredList = _mapper.Map<List<TestScriptVM>>(_testScriptsRepo.GetFilteredTestScripts(mappedIds));
 
-            var testScriptsMappedList = _mapper.Map<List<TestScriptVM>>(testScriptMapData);
-            result.AddRange(testScriptsMappedList);
-            result.AddRange(filteredList);
+                var testScriptsMappedList = _mapper.Map<List<TestScriptVM>>(testScriptMapData);
+                result.AddRange(testScriptsMappedList);
+                result.AddRange(filteredList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
             return result;
         }
 
@@ -50,16 +64,33 @@ namespace Automation.Service.Controllers
         [HttpGet("GetAllKeywordsMap")]
         public IList<TestScript_MapVM> GetAllTestScriptsMap()
         {
-            return _mapper.Map<List<TestScript_MapVM>>(_genericRepo2.GetAll());
+            var result = new List<TestScript_MapVM>();
+            try
+            {
+                result = _mapper.Map<List<TestScript_MapVM>>(_genericRepo2.GetAll());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
         }
 
         [HttpGet("GetScript/{id}/{userId}")]
         public TestScriptVM Get(int id, int userId)
         {
-            var result = _mapper.Map<TestScriptVM>(_genericRepo.GetById(id));
-            var mappedData = _mapper.Map<TestScript_MapVM>(_testScriptsRepo.GetMappedTestScript(id, userId));
-            if (mappedData != null)
-                result = _mapper.Map<TestScriptVM>(mappedData);
+            var result = new TestScriptVM();
+            try
+            {
+                result = _mapper.Map<TestScriptVM>(_genericRepo.GetById(id));
+                var mappedData = _mapper.Map<TestScript_MapVM>(_testScriptsRepo.GetMappedTestScript(id, userId));
+                if (mappedData != null)
+                    result = _mapper.Map<TestScriptVM>(mappedData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
 
             return result;
         }
@@ -67,68 +98,114 @@ namespace Automation.Service.Controllers
         [HttpPut("ResetLockedByField/{id}/{userId}")]
         public void ResetLockedByField(int id, int userId)
         {
-            var data = _genericRepo.GetById(id);
-            if (data != null)
+            try
             {
-                data.IsLocked = null;
-                data.LockedByUser = null;
-                data.UserId = null;
-                _testScriptsRepo.UpdateLockedByFlags(data);
+                var data = _genericRepo.GetById(id);
+                if (data != null)
+                {
+                    data.IsLocked = null;
+                    data.LockedByUser = null;
+                    data.UserId = null;
+                    _testScriptsRepo.UpdateLockedByFlags(data);
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+
         }
 
         [HttpPost("AddScript")]
         public void Post([FromBody]TestScriptVM scripts)
         {
-            var data = _mapper.Map<TestScripts>(scripts);
-            _testScriptsRepo.CreateScript(data);
+            try
+            {
+                var data = _mapper.Map<TestScripts>(scripts);
+                _testScriptsRepo.CreateScript(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
         }
 
         [HttpPut("UpdateScriptAdmin/{id}")]
         public void UpdateScriptAdmin(int id, [FromBody]TestScriptVM scripts)
         {
-            var data = _mapper.Map<TestScripts>(scripts);
-            _testScriptsRepo.UpdateScript(id, data);
+            try
+            {
+                var data = _mapper.Map<TestScripts>(scripts);
+                _testScriptsRepo.UpdateScript(id, data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
         }
 
         [HttpPut("UpdateScript/{id}")]
         public void Put(int id, [FromBody]TestScriptVM scripts)
         {
-            var mapVM = _mapper.Map<TestScript_MapVM>(scripts);
-
-            var testScriptMapEntity = _mapper.Map<TestScripts_Map>(mapVM);
-            testScriptMapEntity.MasterTestScriptID = id;
-
-            var mappedData = _testScriptsRepo.GetMappedTestScript(id, scripts.UserId);
-
-            if (mappedData != null)
+            try
             {
-                _testScriptsRepo.UpdateScriptMap(scripts.UserId, testScriptMapEntity);
+                var mapVM = _mapper.Map<TestScript_MapVM>(scripts);
+
+                var testScriptMapEntity = _mapper.Map<TestScripts_Map>(mapVM);
+                testScriptMapEntity.MasterTestScriptID = id;
+
+                var mappedData = _testScriptsRepo.GetMappedTestScript(id, scripts.UserId);
+
+                if (mappedData != null)
+                {
+                    _testScriptsRepo.UpdateScriptMap(scripts.UserId, testScriptMapEntity);
+                }
+                else
+                {
+                    _testScriptsRepo.CreateScriptMap(testScriptMapEntity);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _testScriptsRepo.CreateScriptMap(testScriptMapEntity);
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
             }
         }
 
         [HttpDelete("DeleteScript/{id}/{userId}")]
         public void Delete(int id, int userId)
         {
-            var mappedData = _testScriptsRepo.GetMappedTestScript(id, userId);
-            if (mappedData == null)
+            try
             {
-                _testScriptsRepo.DeleteScript(id, userId);
+                var mappedData = _testScriptsRepo.GetMappedTestScript(id, userId);
+                if (mappedData == null)
+                {
+                    _testScriptsRepo.DeleteScript(id, userId);
+                }
+                else
+                {
+                    _testScriptsRepo.DeleteScriptMap(userId, id);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _testScriptsRepo.DeleteScriptMap(userId, id);
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
             }
         }
 
         [HttpGet("GetRecordsCount")]
         public int GetRecordsCount()
         {
-           return _genericRepo.GetRecordsCount();
+            var result = 0;
+            try
+            {
+                result = _genericRepo.GetRecordsCount();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
         }
     }
 }

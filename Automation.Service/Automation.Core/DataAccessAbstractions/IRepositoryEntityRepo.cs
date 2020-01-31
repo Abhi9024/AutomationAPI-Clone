@@ -11,5 +11,6 @@ namespace Automation.Core.DataAccessAbstractions
         void DeleteRepository(int repositoryId,int userId);
         void UpdateLockedByFlags(Repository repository);
         List<string> GetAllLogicalNames();
+        List<string> GetAllFindMethod();
     }
 }

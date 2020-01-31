@@ -10,5 +10,8 @@ namespace Automation.Core.DataAccessAbstractions
         void UpdateTestData(int testDataId, TestData testDataEntity);
         void DeleteTestData(int testDataId,int userId);
         void UpdateLockedByFlags(TestData testData);
+        int? GetLastIterationNumber(string tcid);
+        List<string> GetAllModule();
+        List<string> GetAllTCID();
     }
 }

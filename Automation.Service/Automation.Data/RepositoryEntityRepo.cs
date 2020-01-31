@@ -58,6 +58,7 @@ namespace Automation.Data
         {
             return @"SELECT DISTINCT [LogicalName] FROM [dbo].[Repository]";
         }
+        
 
         public void CreateRepository(Repository repositoryEntity)
         {
@@ -151,6 +152,22 @@ namespace Automation.Data
 
                 return result;
             }
+        }
+
+        public List<string> GetAllFindMethod()
+        {
+            var result = new List<string>();
+            result.Add("NATIVEWEBOBJECT");
+            result.Add("WEBOBJECT");
+            result.Add("EVALUATEXPATH");
+            result.Add("EVALUATEXPATHMINWAIT");
+            result.Add("EVALUATEMULTIOBJSXPATH");
+            result.Add("EVALUATEMULTIOBJSXPATHMINWAIT");
+            result.Add("CSSSELECTOR");
+            result.Add("FULLNAME");
+            result.Add("NAMEMAP");
+
+            return result;
         }
     }
 }

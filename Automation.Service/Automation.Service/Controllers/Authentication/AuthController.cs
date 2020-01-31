@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Automation.Core.DataAccessAbstractions;
 using Automation.Service.ViewModel;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,19 +18,30 @@ namespace Automation.Service.Controllers.Authentication
     {
         private IAuthProvider _authProvider;
         private IMapper _mapper;
+        private ILogger<AuthController> _logger;
 
-        public AuthController(IAuthProvider authProvider,IMapper mapper)
+        public AuthController(IAuthProvider authProvider, IMapper mapper, ILogger<AuthController> logger)
         {
             _authProvider = authProvider;
             _mapper = mapper;
+            _logger = logger;
         }
-        
+
         // POST api/values
         [HttpPost("Login")]
         public UserVM Login([FromBody]UserVM user)
         {
-            var userData = _authProvider.ValidateLogin(user.UserName,user.Password);
-            return  _mapper.Map<UserVM>(userData);
+            var result = new UserVM();
+            try
+            {
+                var userData = _authProvider.ValidateLogin(user.UserName, user.Password);
+                result = _mapper.Map<UserVM>(userData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
         }
 
 
@@ -37,9 +49,17 @@ namespace Automation.Service.Controllers.Authentication
         [HttpPost("CreateUser")]
         public string CreateUser([FromBody]UserVM user)
         {
-            _authProvider.CreateUser(user.UserName, user.Password,user.RoleId);
-            return @"User Created Succesfully!";
+            var result = string.Empty;
+            try
+            {
+                _authProvider.CreateUser(user.UserName, user.Password, user.RoleId);
+                result = @"User Created Succesfully!";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
         }
-        
     }
 }

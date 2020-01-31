@@ -21,6 +21,7 @@ using AutoMapper;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNet.OData.Formatter;
 using Microsoft.Net.Http.Headers;
+using Serilog;
 
 namespace Automation.Service
 {
@@ -105,7 +106,7 @@ namespace Automation.Service
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
+            app.UseSerilogRequestLogging();
             app.UseSwagger();
             app.UseSwaggerUI(sw =>
             {
@@ -113,7 +114,7 @@ namespace Automation.Service
             });
 
             app.UseCors(MyAllowSpecificOrigins);
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseMvc(routeBuilder => {
                 routeBuilder.EnableDependencyInjection();
                 routeBuilder.Expand().Select().OrderBy().Filter();

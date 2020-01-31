@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
+using System.Linq;
 
 namespace Automation.Data
 {
@@ -22,7 +23,7 @@ namespace Automation.Data
 
         private string GetInsertScript()
         {
-            return @"INSERT INTO [dbo].[TestData] ([Module], [TCID], [Iterations],[EnvDetail_1],[EnvDetail_2], Param1, Param2, Param3, Param4, Param5, Param6, Param8, Param7, Param9, Param10,
+            return @"INSERT INTO [dbo].[TestData] ([Module], [TCID], [Iterations],[EnvDetail1],[EnvDetail2], Param1, Param2, Param3, Param4, Param5, Param6, Param8, Param7, Param9, Param10,
                     Param11, Param12, Param13, Param14, Param15, Param16, Param17, Param18, Param19, Param20,
                     [Param21],[Param22],[Param23],[Param24],[Param25],[Param26],[Param27],[Param28],[Param29],[Param30],
                     [Param31],[Param32],[Param33],[Param34],[Param35],[Param36],[Param37],[Param38],[Param39],[Param40],
@@ -80,7 +81,7 @@ namespace Automation.Data
         private string GetUpdateScript()
         {
             return @"UPDATE [dbo].[TestData]
-                     SET [Module] = @Module, [TCID] = @TCID, [Iterations] = @Iterations, [EnvDetail_1]=@EnvDetail_1,[EnvDetail_2]=@EnvDetail_2,
+                     SET [Module] = @Module, [TCID] = @TCID, [Iterations] = @Iterations, [EnvDetail1]=@EnvDetail_1,[EnvDetail2]=@EnvDetail_2,
                           Param1 = @Param1, Param2 = @Param2, Param3 = @Param3, 
                           Param4 = @Param4, Param5 = @Param5, Param6 = @Param6, Param8 = @Param8, Param7 = @Param7, Param9 = @Param9,
                           Param10 = @Param10, Param11 = @Param11, Param12 = @Param12, Param13 = @Param13, Param14 = @Param14, Param15 = @Param15, 
@@ -142,6 +143,21 @@ namespace Automation.Data
                      WHERE ID=@Id";
         }
 
+        private string GetNextIterationNumberScript()
+        {
+            return @"SELECT MAX([Iterations]) FROM [dbo].[TestData] where [TCID] = @TCID";
+        }
+
+        private string GetAllModuleScript()
+        {
+            return @"SELECT DISTINCT [Module] FROM [dbo].[TestData]";
+        }
+
+        private string GetAllTCIDScript()
+        {
+            return @"SELECT DISTINCT [TCID] FROM [dbo].[TestData]";
+        }
+
         public void CreateTestData(TestData testData)
         {
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -150,8 +166,8 @@ namespace Automation.Data
                 parameters.Add("@Module", testData.Module);
                 parameters.Add("@TCID", testData.TCID);
                 parameters.Add("@Iterations", testData.Iterations);
-                parameters.Add("@EnvDetail_1", testData.EnvDetail_1);
-                parameters.Add("@EnvDetail_2", testData.EnvDetail_2);
+                parameters.Add("@EnvDetail_1", testData.EnvDetail1);
+                parameters.Add("@EnvDetail_2", testData.EnvDetail2);
                 parameters.Add("@Param1", testData.Param1);
                 parameters.Add("@Param2", testData.Param2);
                 parameters.Add("@Param3", testData.Param3);
@@ -442,8 +458,8 @@ namespace Automation.Data
                 parameters.Add("@Module", testData.Module);
                 parameters.Add("@TCID", testData.TCID);
                 parameters.Add("@Iterations", testData.Iterations);
-                parameters.Add("@EnvDetail_1", testData.EnvDetail_1);
-                parameters.Add("@EnvDetail_2", testData.EnvDetail_2);
+                parameters.Add("@EnvDetail_1", testData.EnvDetail1);
+                parameters.Add("@EnvDetail_2", testData.EnvDetail2);
                 parameters.Add("@Param1", testData.Param1);
                 parameters.Add("@Param2", testData.Param2);
                 parameters.Add("@Param3", testData.Param3);
@@ -722,6 +738,46 @@ namespace Automation.Data
                     parameters,
                     commandType: CommandType.Text);
             }
+        }
+
+        public int? GetLastIterationNumber(string tcid)
+        {
+            int? result = null;
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@TCID", tcid);
+
+                 int maxIteration = con.Query<int>($"{GetNextIterationNumberScript()}",
+                    parameters,
+                    commandType: CommandType.Text).FirstOrDefault();
+                result = (maxIteration > 0) ? (int?)maxIteration : null;
+            }
+            return result;
+        }
+
+        public List<string> GetAllModule()
+        {
+            var result = new List<string>();
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                result = (List<string>) con.Query<string>($"{GetAllModuleScript()}",
+                   commandType: CommandType.Text);
+            }
+
+            return result;
+        }
+
+        public List<string> GetAllTCID()
+        {
+            var result = new List<string>();
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                result = (List<string>)con.Query<string>($"{GetAllTCIDScript()}",
+                   commandType: CommandType.Text);
+            }
+
+            return result;
         }
     }
 }

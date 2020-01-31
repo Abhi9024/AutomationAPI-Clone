@@ -10,8 +10,8 @@ namespace Automation.Service.ViewModel
         public string Module { get; set; }
         public string TCID { get; set; }
         public int Iterations { get; set; }
-        public string EnvDetail_1 { get; set; }
-        public string EnvDetail_2 { get; set; }
+        public string EnvDetail1 { get; set; }
+        public string EnvDetail2 { get; set; }
         public string Param1 { get; set; }
 
         public string Param2 { get; set; }

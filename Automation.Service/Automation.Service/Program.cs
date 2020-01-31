@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Automation.Service
 {
@@ -14,11 +15,17 @@ namespace Automation.Service
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+               .MinimumLevel.Error()
+               .WriteTo.File("logs\\myapp.txt", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .UseStartup<Startup>();
     }
 }
