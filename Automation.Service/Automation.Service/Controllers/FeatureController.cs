@@ -80,6 +80,25 @@ namespace Automation.Service.Controllers
             return moduleData;
         }
 
+
+        [EnableQuery]
+        [HttpGet("GetAllModuleControllerAdmin")]
+        public IList<ModuleControllerVM> GetAllModuleControllerAdmin()
+        {
+            var moduleData = new List<ModuleControllerVM>();
+            try
+            {
+                var mapData = GetAllModuleControllerMap();
+                moduleData = _mapper.Map<List<ModuleControllerVM>>(_genericRepo.GetAll());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return moduleData;
+        }
+
+
         [EnableQuery]
         [HttpGet("GetAllModuleControllerMap")]
         public IList<ModuleController_MapVM> GetAllModuleControllerMap()
@@ -175,6 +194,24 @@ namespace Automation.Service.Controllers
         }
 
         [EnableQuery]
+        [HttpGet("GetAllTestControllerAdmin")]
+        public IList<TestControllerVM> GetAllTestControllerAdmin()
+        {
+
+            var result = new List<TestControllerVM>();
+            try
+            {
+                var mapData = GetAllTestControllerMap();
+                result = _mapper.Map<List<TestControllerVM>>(_genericRepo2.GetAll());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
+
+        [EnableQuery]
         [HttpGet("GetAllTestControllerMap")]
         public IList<TestController_MapVM> GetAllTestControllerMap()
         {
@@ -259,6 +296,22 @@ namespace Automation.Service.Controllers
             return result;
         }
 
+        [HttpGet("GetModuleControllerByIdAdmin/{id}")]
+        public ModuleControllerVM GetModuleControllerByIdAdmin(int id)
+        {
+            var result = new ModuleControllerVM();
+            try
+            {
+                var data = _genericRepo.GetById(id);
+                result = _mapper.Map<ModuleControllerVM>(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
+
         //[HttpGet("GetModuleControllerMapById/{id}")]
         //public ModuleController_MapVM GetModuleControllerMapById(int id)
         //{
@@ -276,6 +329,22 @@ namespace Automation.Service.Controllers
                 var mappedData = _mapper.Map<TestController_MapVM>(_testControllerRepo.GetMappedTestControllerData(userId, data, id));
                 if (mappedData != null)
                     result = _mapper.Map<TestControllerVM>(mappedData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
+
+        [HttpGet("GetTestControllerByIdAdmin/{id}")]
+        public TestControllerVM GetTestControllerByIdAdmin(int id)
+        {
+            var result = new TestControllerVM();
+            try
+            {
+                var data = _genericRepo2.GetById(id);
+                result = _mapper.Map<TestControllerVM>(data);
             }
             catch (Exception ex)
             {
@@ -319,8 +388,37 @@ namespace Automation.Service.Controllers
             }
         }
 
+        [HttpPost("AddModuleControllerAdmin")]
+        public void AddModuleControllerAdmin([FromBody]ModuleControllerVM controller1)
+        {
+            try
+            {
+                var data = _mapper.Map<ModuleController>(controller1);
+                _testControllerRepo.CreateController1(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
         [HttpPost("AddTestController")]
         public void AddTestController([FromBody]TestControllerVM controller2)
+        {
+            try
+            {
+                var data = _mapper.Map<TestController>(controller2);
+                _testControllerRepo.CreateController2(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost("AddTestControllerAdmin")]
+        public void AddTestControllerAdmin([FromBody]TestControllerVM controller2)
         {
             try
             {
@@ -373,6 +471,20 @@ namespace Automation.Service.Controllers
             }
         }
 
+        [HttpPut("UpdateModuleControllerAdmin/{id}")]
+        public void UpdateModuleControllerAdmin(int id, [FromBody]ModuleControllerVM testController1)
+        {
+            try
+            {
+                var data = _mapper.Map<ModuleController>(testController1);
+                _testControllerRepo.UpdateController1(id, data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
         [HttpPut("UpdateTestController/{id}")]
         public void UpdateTestController(int id, [FromBody]TestControllerVM testController2)
         {
@@ -392,6 +504,20 @@ namespace Automation.Service.Controllers
                 {
                     _testControllerRepo.CreateController2Map(testController2.UserId, data, id);
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpPut("UpdateTestControllerAdmin/{id}")]
+        public void UpdateTestControllerAdmin(int id, [FromBody]TestControllerVM testController2)
+        {
+            try
+            {
+                var data = _mapper.Map<TestController>(testController2);
+                _testControllerRepo.UpdateController2(id, data);
             }
             catch (Exception ex)
             {
@@ -436,6 +562,20 @@ namespace Automation.Service.Controllers
             }
         }
 
+        [HttpDelete("DeleteModuleControllerAdmin/{id}")]
+        public void DeleteModuleControllerAdmin(int id)
+        {
+            try
+            {
+                var testController1 = _genericRepo.GetById(id);
+                _testControllerRepo.DeleteController1(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
         [HttpDelete("DeleteTestController/{id}/{userId}")]
         public void DeleteTestController(int id, int userId)
         {
@@ -452,6 +592,19 @@ namespace Automation.Service.Controllers
                 {
                     _testControllerRepo.DeleteController2Map(userId, testController2.TestCaseID, id);
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("DeleteTestControllerAdmin/{id}")]
+        public void DeleteTestControllerAdmin(int id)
+        {
+            try
+            {
+                _testControllerRepo.DeleteController2(id);
             }
             catch (Exception ex)
             {

@@ -61,6 +61,23 @@ namespace Automation.Service.Controllers
         }
 
         [EnableQuery]
+        [HttpGet("GetScriptsAdmin")]
+        public ActionResult<IList<TestScriptVM>> GetScriptsAdmin()
+        {
+            var result = new List<TestScriptVM>();
+            try
+            {
+                result = _mapper.Map<List<TestScriptVM>>(_genericRepo.GetAll());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        [EnableQuery]
         [HttpGet("GetAllKeywordsMap")]
         public IList<TestScript_MapVM> GetAllTestScriptsMap()
         {
@@ -95,6 +112,22 @@ namespace Automation.Service.Controllers
             return result;
         }
 
+        [HttpGet("GetScriptAdmin/{id}")]
+        public TestScriptVM GetScriptAdmin(int id)
+        {
+            var result = new TestScriptVM();
+            try
+            {
+                result = _mapper.Map<TestScriptVM>(_genericRepo.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return result;
+        }
+
         [HttpPut("ResetLockedByField/{id}/{userId}")]
         public void ResetLockedByField(int id, int userId)
         {
@@ -119,6 +152,20 @@ namespace Automation.Service.Controllers
 
         [HttpPost("AddScript")]
         public void Post([FromBody]TestScriptVM scripts)
+        {
+            try
+            {
+                var data = _mapper.Map<TestScripts>(scripts);
+                _testScriptsRepo.CreateScript(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpPost("AddScriptAdmin")]
+        public void AddScriptAdmin([FromBody]TestScriptVM scripts)
         {
             try
             {
@@ -186,6 +233,19 @@ namespace Automation.Service.Controllers
                 {
                     _testScriptsRepo.DeleteScriptMap(userId, id);
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("DeleteScriptAdmin/{id}/{userId}")]
+        public void DeleteScriptAdmin(int id, int userId)
+        {
+            try
+            {
+                 _testScriptsRepo.DeleteScript(id, userId);
             }
             catch (Exception ex)
             {

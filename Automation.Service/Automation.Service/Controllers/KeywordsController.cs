@@ -57,6 +57,23 @@ namespace Automation.Service.Controllers
         }
 
         [EnableQuery]
+        [HttpGet("GetAllKeywordsAdmin")]
+        public IList<KeywordEntityVM> GetAllKeywordsAdmin()
+        {
+            var result = new List<KeywordEntityVM>();
+            try
+            {
+                result = _mapper.Map<List<KeywordEntityVM>>(_genericRepo.GetAll());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return result;
+        }
+
+        [EnableQuery]
         [HttpGet("GetAllKeywordsMap")]
         public IList<KeywordEntity_MapVM> GetAllKeywordsMap()
         {
@@ -90,6 +107,21 @@ namespace Automation.Service.Controllers
             return result;
         }
 
+        [HttpGet("GetKeywordByIdAdmin/{id}")]
+        public KeywordEntityVM GetKeywordByIdAdmin(int id)
+        {
+            var result = new KeywordEntityVM();
+            try
+            {
+                result = _mapper.Map<KeywordEntityVM>(_genericRepo.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
+
         [HttpPut("ResetLockedByField/{id}/{userId}")]
         public void ResetLockedByField(int id, int userId)
         {
@@ -112,6 +144,20 @@ namespace Automation.Service.Controllers
 
         [HttpPost("AddKeyword")]
         public void AddKeyword([FromBody]KeywordEntityVM keyword)
+        {
+            try
+            {
+                var data = _mapper.Map<KeywordLibrary>(keyword);
+                _keywordRepo.CreateKeyword(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpPost("AddKeywordAdmin")]
+        public void AddKeywordAdmin([FromBody]KeywordEntityVM keyword)
         {
             try
             {
@@ -178,6 +224,23 @@ namespace Automation.Service.Controllers
                 else
                 {
                     _keywordRepo.DeleteKeywordMap(userId, id);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("DeleteKeywordAdmin/{id}/{userId}")]
+        public void DeleteKeywordAdmin(int id, int userId)
+        {
+            try
+            {
+                var mappedData = _genericRepo.GetById(id);
+                if (mappedData == null)
+                {
+                    _keywordRepo.DeleteKeyword(id, userId);
                 }
             }
             catch (Exception ex)
