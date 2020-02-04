@@ -9,5 +9,10 @@ namespace Automation.Core.DataAccessAbstractions
         int RecordsModified();
         string[] ModifiedFeeds();
         List<UserRole> GetAllRoles();
+        string[] GetModifiedFeedsByMonth(int fromLastMonthCount);
+        string[] GetModifiedFeedsByDay(int fromLastDayCount);
+        string[] GetModifiedFeedsByMinute(int fromLastMinuteCount);
+        string[] GetModifiedFeedsByHours(int fromLastHourCount);
+        string[] GetModifiedFeedsBySecond(int fromLastSecondCount);
     }
 }

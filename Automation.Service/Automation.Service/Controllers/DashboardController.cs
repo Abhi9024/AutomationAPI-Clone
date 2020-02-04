@@ -84,6 +84,106 @@ namespace Automation.Service.Controllers
             return feeds.ToArray();
         }
 
+        [HttpGet("GetLatestFeedsByMonth/{prevMonth}")]
+        public string[] GetLatestFeedsByMonth(int prevMonth)
+        {
+            var feeds = new List<string>();
+            try
+            {
+                var users = _dashboardRepo.GetModifiedFeedsByMonth(prevMonth);
+                foreach (var user in users)
+                {
+                    feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return feeds.ToArray();
+        }
+
+        [HttpGet("GetLatestFeedsByHour/{prevHour}")]
+        public string[] GetLatestFeedsByHour(int prevHour)
+        {
+            var feeds = new List<string>();
+            try
+            {
+                var users = _dashboardRepo.GetModifiedFeedsByHours(prevHour);
+                foreach (var user in users)
+                {
+                    feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return feeds.ToArray();
+        }
+
+        [HttpGet("GetLatestFeedsByMinute/{prevMinute}")]
+        public string[] GetLatestFeedsByMinute(int prevMinute)
+        {
+            var feeds = new List<string>();
+            try
+            {
+                var users = _dashboardRepo.GetModifiedFeedsByMinute(prevMinute);
+                foreach (var user in users)
+                {
+                    feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return feeds.ToArray();
+        }
+
+        [HttpGet("GetLatestFeedsBySecond/{prevSec}")]
+        public string[] GetLatestFeedsBySecond(int prevSec)
+        {
+            var feeds = new List<string>();
+            try
+            {
+                var users = _dashboardRepo.GetModifiedFeedsBySecond(prevSec);
+                foreach (var user in users)
+                {
+                    feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return feeds.ToArray();
+        }
+
+        [HttpGet("GetLatestFeedsByDay/{prevDay}")]
+        public string[] GetLatestFeedsByDay(int prevDay)
+        {
+            var feeds = new List<string>();
+            try
+            {
+                var users = _dashboardRepo.GetModifiedFeedsByDay(prevDay);
+                foreach (var user in users)
+                {
+                    feeds.Add($"{user.ToUpper()} recently Modified/Added an entry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+
+            return feeds.ToArray();
+        }
+
         [HttpGet("GetAllRoles")]
         public List<RoleVM> GetAllRoles()
         {
