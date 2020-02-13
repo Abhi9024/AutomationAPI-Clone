@@ -166,6 +166,15 @@ namespace Automation.Data
             return @"Select * from [dbo].[TestScripts_Map] where [UserId]=@UserId and [MasterTestScriptID]=@MasterTestScriptID";
         }
 
+        private string GetAllTestScriptNameScript()
+        {
+            return @"SELECT Distinct TestScriptName FROM [dbo].[TestScripts]";
+        }
+
+        private string GetAllTestCaseIDScript()
+        {
+            return @"SELECT Distinct TestCaseID FROM [dbo].[TestScripts]";
+        }
 
         public void CreateScript(TestScripts script)
         {
@@ -736,6 +745,28 @@ namespace Automation.Data
                 var result = con.Query<TestScripts_Map>($"{GetDataScriptFromTestScriptMap()}",
                     parameters,
                     commandType: CommandType.Text).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public List<string> GetAllTestScriptName()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var result = (List<string>)con.Query<string>($"{GetAllTestScriptNameScript()}",
+                    commandType: CommandType.Text);
+
+                return result;
+            }
+        }
+
+        public List<string> GetAllTestCaseID()
+        {
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                var result = (List<string>)con.Query<string>($"{GetAllTestCaseIDScript()}",
+                    commandType: CommandType.Text);
+
                 return result;
             }
         }

@@ -267,5 +267,35 @@ namespace Automation.Service.Controllers
             }
             return result;
         }
+
+        [HttpGet("GetAllTestScriptName")]
+        public List<string> GetAllTestScriptName()
+        {
+            var result = new List<string>();
+            try
+            {
+                result = _testScriptsRepo.GetAllTestScriptName();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
+
+        [HttpGet("GetAllTestCaseID")]
+        public List<string> GetAllTestCaseID()
+        {
+            var result = new List<string>();
+            try
+            {
+                result = _testScriptsRepo.GetAllTestCaseID();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Source: {ex.Source}, StackTrace: {ex.StackTrace} ,  Message: {ex.Message}");
+            }
+            return result;
+        }
     }
 }

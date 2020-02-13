@@ -16,5 +16,7 @@ namespace Automation.Core.DataAccessAbstractions
         void UpdateLockedByFlags(TestScripts testScript);
         List<TestScripts> GetFilteredTestScripts(List<int> Ids);
         TestScripts_Map GetMappedTestScript(int id, int? userId);
+        List<string> GetAllTestScriptName();
+        List<string> GetAllTestCaseID();
     }
 }
