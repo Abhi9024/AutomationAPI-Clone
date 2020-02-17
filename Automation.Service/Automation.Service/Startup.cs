@@ -114,7 +114,7 @@ namespace Automation.Service
             });
 
             app.UseCors(MyAllowSpecificOrigins);
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc(routeBuilder => {
                 routeBuilder.EnableDependencyInjection();
                 routeBuilder.Expand().Select().OrderBy().Filter();

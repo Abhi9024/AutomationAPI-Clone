@@ -748,10 +748,10 @@ namespace Automation.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@TCID", tcid);
 
-                 int maxIteration = con.Query<int>($"{GetNextIterationNumberScript()}",
+                 int? maxIteration = con.Query<int?>($"{GetNextIterationNumberScript()}",
                     parameters,
                     commandType: CommandType.Text).FirstOrDefault();
-                result = (maxIteration > 0) ? (int?)maxIteration : null;
+                result = maxIteration;
             }
             return result;
         }
