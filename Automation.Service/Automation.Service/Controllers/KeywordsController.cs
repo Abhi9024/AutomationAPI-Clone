@@ -238,7 +238,7 @@ namespace Automation.Service.Controllers
             try
             {
                 var mappedData = _genericRepo.GetById(id);
-                if (mappedData == null)
+                if (mappedData != null)
                 {
                     _keywordRepo.DeleteKeyword(id, userId);
                 }
